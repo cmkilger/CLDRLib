@@ -1564,6 +1564,43 @@ typedef NS_ENUM(NSUInteger, TokenType) {
 
 #pragma mark -
 
+NSMutableString * OptimizeCode(NSMutableString * code) {
+    
+    NSRegularExpression * regex = [NSRegularExpression regularExpressionWithPattern:@"fmod\\([^\\)]+\\)" options:0 error:nil];
+    
+    NSMutableDictionary * counts = [[NSMutableDictionary alloc] init];
+    [regex enumerateMatchesInString:code options:0 range:NSMakeRange(0, [code length]) usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
+        NSString * value = [code substringWithRange:[result range]];
+        NSNumber * count = counts[value];
+        if (!count) {
+            count = @(0);
+            counts[value] = count;
+        }
+        counts[value] = @([count integerValue] + 1);
+    }];
+    
+    if ([counts count] > 0) {
+        NSMutableString * variables = [[NSMutableString alloc] init];
+        
+        __block int n = 1;
+        [counts enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+            if ([obj integerValue] > 1) {
+                if ([variables length] > 0) {
+                    [variables appendString:@", "];
+                }
+                NSString * variable = [[NSString alloc] initWithFormat:@"a%d", n];
+                [variables appendFormat:@"%@ = %@", variable, key];
+                [code replaceOccurrencesOfString:key withString:variable options:0 range:NSMakeRange(0, [code length])];
+                n++;
+            }
+        }];
+        
+        code = [[NSMutableString alloc] initWithFormat:@"        unsigned long %@;\n%@", variables, code];
+    }
+    
+    return code;
+}
+
 int main(int argc, char * argv[]) {
     @autoreleasepool {
         NSLog(@"%@", plural(@"be", @"61", nil));
@@ -1579,6 +1616,8 @@ int main(int argc, char * argv[]) {
         NSMutableString * code = [[NSMutableString alloc] initWithString:@"rules = @{\n"];
         [input enumerateKeysAndObjectsUsingBlock:^(id language, id rules, BOOL *stop) {
             [code appendFormat:@"    @\"%@\": ^(CLDRPluralOperands o){\n", language];
+            
+            NSMutableString * blockCode = [[NSMutableString alloc] init];
             [rules enumerateKeysAndObjectsUsingBlock:^(id key, id rule, BOOL *stop) {
                 if ([key isEqualToString:@"pluralRule-count-other"]) return;
                     
@@ -1595,9 +1634,12 @@ int main(int argc, char * argv[]) {
                     return;
                 }
                 
-                [code appendFormat:@"        if (%@) return @\"%@\";\n", logic, [[key componentsSeparatedByString:@"-"] lastObject]];
+                [blockCode appendFormat:@"        if (%@) return @\"%@\";\n", logic, [[key componentsSeparatedByString:@"-"] lastObject]];
             }];
-            [code appendString:@"        return @\"other\";\n"];
+            [blockCode appendString:@"        return @\"other\";\n"];
+            
+            blockCode = OptimizeCode(blockCode);
+            
             [code appendString:@"    },\n"];
         }];
         [code appendString:@"};\n"];
