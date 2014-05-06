@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "CLDRPluralOperands.h"
 #import "CLDRPluralRule.h"
-#import "NSBundle+CLDRPlurals.h"
 
 #pragma mark -
 
@@ -428,8 +427,12 @@ typedef NS_ENUM(NSUInteger, TokenType) {
         }
         if (range.length == 1) {
             [code appendFormat:@"%@ == %@", operand, [@(range.location) stringValue]];
+        } else if (range.location == 0 && [self.operand isEqualToString:@"n"]) {
+            [code appendFormat:@"(%@ <= %@ && o.f == 0)", operand, [@(NSMaxRange(range)-1) stringValue]];
         } else if (range.location == 0) {
             [code appendFormat:@"%@ <= %@", operand, [@(NSMaxRange(range)-1) stringValue]];
+        } else if ([self.operand isEqualToString:@"n"]) {
+            [code appendFormat:@"(%@ <= %@ && %@ <= %@ && o.f == 0)", [@(range.location) stringValue], operand, operand, [@(NSMaxRange(range)-1) stringValue]];
         } else {
             [code appendFormat:@"(%@ <= %@ && %@ <= %@)", [@(range.location) stringValue], operand, operand, [@(NSMaxRange(range)-1) stringValue]];
         }
@@ -640,6 +643,42 @@ typedef NS_ENUM(NSUInteger, TokenType) {
     return description;
 }
 
+- (NSString *)testsWithKey:(NSString *)key {
+    NSMutableString * tests = [[NSMutableString alloc] init];
+    
+    NSMutableArray * sampleLists = [[NSMutableArray alloc] init];
+    if (self.integerSampleList) {
+        [sampleLists addObject:self.integerSampleList];
+    }
+    if (self.decimalSampleList) {
+        [sampleLists addObject:self.decimalSampleList];
+    }
+    
+    for (SampleList * sampleList in sampleLists) {
+        for (SampleRange * range in sampleList.sampleRanges) {
+            [tests appendFormat:@"    XCTAssertEqual([rule pluralKeyForString:@\"%@\"], @\"%@\", @\"\");\n", range.start, key];
+            if (range.end) {
+                CLDRPluralOperands * s = [[CLDRPluralOperands alloc] initWithString:range.start];
+                CLDRPluralOperands * e = [[CLDRPluralOperands alloc] initWithString:range.end];
+                
+                if (s.v == 0) {
+                    unsigned long end = e.i;
+                    for (unsigned long i = s.i+1; i <= end; i++) {
+                        [tests appendFormat:@"    XCTAssertEqual([rule pluralKeyForString:@\"%lu\"], @\"%@\", @\"\");\n", i, key];
+                    }
+                } else {
+                    unsigned long multiplier = 10*s.v;
+                    unsigned long end = e.i*multiplier+e.f;
+                    for (unsigned long i = s.i*multiplier+s.f+1; i <= end; i++) {
+                        [tests appendFormat:@"    XCTAssertEqual([rule pluralKeyForString:@\"%lu.%lu\"], @\"%@\", @\"\");\n", i/multiplier, i%multiplier, key];
+                    }
+                }
+            }
+        }
+    }
+    return tests;
+}
+
 @end
 
 @interface Rule : NSObject
@@ -649,13 +688,9 @@ typedef NS_ENUM(NSUInteger, TokenType) {
 @implementation Rule
 
 + (Rule *)ruleWithTokens:(NSArray *)tokens atIndex:(NSUInteger *)index {
-    Condition * condition = [Condition conditionWithTokens:tokens atIndex:index];
-    if (!condition) return nil;
-    
     Rule * rule = [[Rule alloc] init];
-    rule.condition = condition;
+    rule.condition = [Condition conditionWithTokens:tokens atIndex:index];
     rule.sample = [Sample samplesWithTokens:tokens atIndex:index];
-    
     return rule;
 }
 
@@ -703,49 +738,93 @@ NSMutableString * OptimizeCode(NSMutableString * code) {
         }];
         
         if ([variables length] > 0) {
-            code = [[NSMutableString alloc] initWithFormat:@"        unsigned long %@;\n%@", variables, code];
+            code = [[NSMutableString alloc] initWithFormat:@"        double %@;\n%@", variables, code];
         }
     }
     
     return code;
 }
 
+NSString * GenerateCode(NSString * file) {
+    NSData * data = [[NSData alloc] initWithContentsOfFile:file];
+    NSDictionary * input = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil][@"supplemental"][@"plurals-type-cardinal"];
+    
+    NSMutableString * code = [[NSMutableString alloc] initWithString:@"rules = @{\n"];
+    [input enumerateKeysAndObjectsUsingBlock:^(id language, id rules, BOOL *stop) {
+        [code appendFormat:@"    @\"%@\": ^(CLDRPluralOperands * o){\n", language];
+        
+        NSMutableString * blockCode = [[NSMutableString alloc] init];
+        [rules enumerateKeysAndObjectsUsingBlock:^(id key, id rule, BOOL *stop) {
+            if ([key isEqualToString:@"pluralRule-count-other"]) return;
+            
+            NSArray * tokens = [LexicalAnalyzer analyze:rule];
+            if (!tokens) {
+                NSLog(@"Error parsing rule: %@:%@", language, key);
+                return;
+            }
+            
+            NSUInteger index = 0;
+            NSString * logic = [[Rule ruleWithTokens:tokens atIndex:&index] code];
+            if (index != [tokens count]) {
+                NSLog(@"Error parsing rule: %@:%@ :at location: %@", language, key, @(index));
+                return;
+            }
+            
+            [blockCode appendFormat:@"        if (%@) return @\"%@\";\n", logic, [[key componentsSeparatedByString:@"-"] lastObject]];
+        }];
+        [blockCode appendString:@"        return @\"other\";\n"];
+        
+        blockCode = OptimizeCode(blockCode);
+        
+        [code appendString:blockCode];
+        [code appendString:@"    },\n"];
+    }];
+    [code appendString:@"};\n"];
+    
+    return code;
+}
+
+NSString * GenerateTests(NSString * file) {
+    NSData * data = [[NSData alloc] initWithContentsOfFile:file];
+    NSDictionary * input = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil][@"supplemental"][@"plurals-type-cardinal"];
+    
+    NSMutableString * tests = [[NSMutableString alloc] initWithString:@"@implementation CLDRRulesTests\n\n"];
+    [input enumerateKeysAndObjectsUsingBlock:^(id language, id rules, BOOL *stop) {
+        [tests appendFormat:@"- (void)testLanguage_%@ {\n", [language stringByReplacingOccurrencesOfString:@"-" withString:@"_"]];
+        [tests appendFormat:@"    CLDRPluralRule * rule = [[CLDRPluralRule alloc] initWithLanguageCode:@\"%@\"];\n\n", language];
+        
+        [rules enumerateKeysAndObjectsUsingBlock:^(id key, id rule, BOOL *stop) {
+            NSArray * tokens = [LexicalAnalyzer analyze:rule];
+            if (!tokens) {
+                NSLog(@"Error parsing rule: %@:%@", language, key);
+                return;
+            }
+            
+            key = [[key componentsSeparatedByString:@"-"] lastObject];
+            
+            NSUInteger index = 0;
+            NSString * logic = [[[Rule ruleWithTokens:tokens atIndex:&index] sample] testsWithKey:key];
+            if (index != [tokens count]) {
+                NSLog(@"Error parsing rule: %@:%@ :at location: %@", language, key, @(index));
+                return;
+            }
+            
+            [tests appendString:logic];
+        }];
+        [tests appendString:@"}\n\n"];
+    }];
+    [tests appendString:@"@end\n"];
+    
+    return tests;
+}
+
 int main(int argc, char * argv[]) {
     @autoreleasepool {
-        NSData * data = [[NSData alloc] initWithContentsOfFile:@"/Users/cmkilger/Downloads/json/supplemental/plurals.json"];
-        NSDictionary * input = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil][@"supplemental"][@"plurals-type-cardinal"];
+        NSString * code = GenerateCode(@"/Users/cmkilger/Downloads/json/supplemental/plurals.json");
+        NSString * tests = GenerateTests(@"/Users/cmkilger/Downloads/json/supplemental/plurals.json");
         
-        NSMutableString * code = [[NSMutableString alloc] initWithString:@"rules = @{\n"];
-        [input enumerateKeysAndObjectsUsingBlock:^(id language, id rules, BOOL *stop) {
-            [code appendFormat:@"    @\"%@\": ^(CLDRPluralOperands o){\n", language];
-            
-            NSMutableString * blockCode = [[NSMutableString alloc] init];
-            [rules enumerateKeysAndObjectsUsingBlock:^(id key, id rule, BOOL *stop) {
-                if ([key isEqualToString:@"pluralRule-count-other"]) return;
-                    
-                NSArray * tokens = [LexicalAnalyzer analyze:rule];
-                if (!tokens) {
-                    NSLog(@"Error parsing rule: %@:%@", language, key);
-                    return;
-                }
-                
-                NSUInteger index = 0;
-                NSString * logic = [[Rule ruleWithTokens:tokens atIndex:&index] code];
-                if (index != [tokens count]) {
-                    NSLog(@"Error parsing rule: %@:%@ :at location: %@", language, key, @(index));
-                    return;
-                }
-                
-                [blockCode appendFormat:@"        if (%@) return @\"%@\";\n", logic, [[key componentsSeparatedByString:@"-"] lastObject]];
-            }];
-            [blockCode appendString:@"        return @\"other\";\n"];
-            
-            blockCode = OptimizeCode(blockCode);
-            
-            [code appendString:blockCode];
-            [code appendString:@"    },\n"];
-        }];
-        [code appendString:@"};\n"];
+        NSLog(@"%@", code);
+        NSLog(@"%@", tests);
         
         return 0;
     }
