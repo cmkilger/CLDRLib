@@ -7,8 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CLDRPluralOperands.h"
-#import "CLDRPluralRule.h"
 
 #pragma mark -
 
@@ -658,18 +656,17 @@ typedef NS_ENUM(NSUInteger, TokenType) {
         for (SampleRange * range in sampleList.sampleRanges) {
             [tests appendFormat:@"    XCTAssertEqual([rule pluralKeyForString:@\"%@\"], @\"%@\", @\"\");\n", range.start, key];
             if (range.end) {
-                CLDRPluralOperands * s = [[CLDRPluralOperands alloc] initWithString:range.start];
-                CLDRPluralOperands * e = [[CLDRPluralOperands alloc] initWithString:range.end];
+                NSArray * components = [range.start componentsSeparatedByString:@"."];
+                unsigned long multiplier = ([components count] > 1 ? pow(10, [components[1] length]) : 1);
                 
-                if (s.v == 0) {
-                    unsigned long end = e.i;
-                    for (unsigned long i = s.i+1; i <= end; i++) {
+                if (multiplier == 1) {
+                    unsigned long end = [range.end integerValue];
+                    for (unsigned long i = [range.start integerValue]+1; i <= end; i++) {
                         [tests appendFormat:@"    XCTAssertEqual([rule pluralKeyForString:@\"%lu\"], @\"%@\", @\"\");\n", i, key];
                     }
                 } else {
-                    unsigned long multiplier = 10*s.v;
-                    unsigned long end = e.i*multiplier+e.f;
-                    for (unsigned long i = s.i*multiplier+s.f+1; i <= end; i++) {
+                    unsigned long end = [range.end doubleValue]*multiplier;
+                    for (unsigned long i = [range.start doubleValue]*multiplier+1; i <= end; i++) {
                         [tests appendFormat:@"    XCTAssertEqual([rule pluralKeyForString:@\"%lu.%lu\"], @\"%@\", @\"\");\n", i/multiplier, i%multiplier, key];
                     }
                 }
@@ -820,10 +817,10 @@ NSString * GenerateTests(NSString * file) {
 
 int main(int argc, char * argv[]) {
     @autoreleasepool {
-        NSString * code = GenerateCode(@"/Users/cmkilger/Downloads/json/supplemental/plurals.json");
+//        NSString * code = GenerateCode(@"/Users/cmkilger/Downloads/json/supplemental/plurals.json");
         NSString * tests = GenerateTests(@"/Users/cmkilger/Downloads/json/supplemental/plurals.json");
         
-        NSLog(@"%@", code);
+//        NSLog(@"%@", code);
         NSLog(@"%@", tests);
         
         return 0;

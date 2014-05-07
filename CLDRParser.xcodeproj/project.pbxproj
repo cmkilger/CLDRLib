@@ -17,9 +17,7 @@
 		9A7AE79D191810E0009B4012 /* NSBundle+CLDRPlurals.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A7AE77119180157009B4012 /* NSBundle+CLDRPlurals.m */; };
 		9A7AE79E191810E4009B4012 /* CLDRPluralRule.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADBD09819174BD50074D292 /* CLDRPluralRule.m */; };
 		9A7AE79F191810E8009B4012 /* CLDRPluralOperands.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADBD09B19174C1F0074D292 /* CLDRPluralOperands.m */; };
-		9A7AE7A019183B58009B4012 /* CLDRPluralOperands.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADBD09B19174C1F0074D292 /* CLDRPluralOperands.m */; };
 		9A7AE7A219183D23009B4012 /* CLDRRulesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A7AE7A119183D23009B4012 /* CLDRRulesTests.m */; };
-		9A7AE7A319184380009B4012 /* CLDRPluralRule.m in Sources */ = {isa = PBXBuildFile; fileRef = 9ADBD09819174BD50074D292 /* CLDRPluralRule.m */; };
 		9AC20E7F19142D2200E2EF7A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9AC20E7E19142D2200E2EF7A /* Foundation.framework */; };
 		9AC20E8219142D2200E2EF7A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AC20E8119142D2200E2EF7A /* main.m */; };
 		9AC20E8619142D2200E2EF7A /* CLDRParser.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 9AC20E8519142D2200E2EF7A /* CLDRParser.1 */; };
@@ -338,8 +336,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9A7AE7A319184380009B4012 /* CLDRPluralRule.m in Sources */,
-				9A7AE7A019183B58009B4012 /* CLDRPluralOperands.m in Sources */,
 				9AC20E8219142D2200E2EF7A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
