@@ -1,0 +1,456 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		9A7AE7DC191AD6DC009B4012 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A7AE7DB191AD6DC009B4012 /* Cocoa.framework */; };
+		9A7AE7ED191AD6DC009B4012 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A7AE7EC191AD6DC009B4012 /* XCTest.framework */; };
+		9A7AE7EE191AD6DC009B4012 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A7AE7DB191AD6DC009B4012 /* Cocoa.framework */; };
+		9A7AE7F1191AD6DC009B4012 /* libCLDRPlurals.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A7AE7D8191AD6DC009B4012 /* libCLDRPlurals.a */; };
+		9A7AE7F7191AD6DC009B4012 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 9A7AE7F5191AD6DC009B4012 /* InfoPlist.strings */; };
+		9A7AE7F9191AD6DC009B4012 /* CLDRPluralsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A7AE7F8191AD6DC009B4012 /* CLDRPluralsTests.m */; };
+		9A7AE803191AD770009B4012 /* CLDRRulesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A7AE802191AD770009B4012 /* CLDRRulesTests.m */; };
+		9A7AE80C191AD77A009B4012 /* CLDRPluralOperands.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A7AE804191AD77A009B4012 /* CLDRPluralOperands.h */; };
+		9A7AE80D191AD77A009B4012 /* CLDRPluralOperands.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A7AE805191AD77A009B4012 /* CLDRPluralOperands.m */; };
+		9A7AE80E191AD77A009B4012 /* CLDRPluralRule.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A7AE806191AD77A009B4012 /* CLDRPluralRule.h */; };
+		9A7AE80F191AD77A009B4012 /* CLDRPluralRule.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A7AE807191AD77A009B4012 /* CLDRPluralRule.m */; };
+		9A7AE812191AD77A009B4012 /* NSBundle+CLDRPlurals.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A7AE80A191AD77A009B4012 /* NSBundle+CLDRPlurals.h */; };
+		9A7AE813191AD77A009B4012 /* NSBundle+CLDRPlurals.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A7AE80B191AD77A009B4012 /* NSBundle+CLDRPlurals.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		9A7AE7EF191AD6DC009B4012 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9A7AE7D0191AD6DC009B4012 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9A7AE7D7191AD6DC009B4012;
+			remoteInfo = CLDRPlurals;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		9A7AE7D8191AD6DC009B4012 /* libCLDRPlurals.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libCLDRPlurals.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		9A7AE7DB191AD6DC009B4012 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		9A7AE7DE191AD6DC009B4012 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		9A7AE7DF191AD6DC009B4012 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		9A7AE7E0191AD6DC009B4012 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		9A7AE7E3191AD6DC009B4012 /* CLDRPlurals-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CLDRPlurals-Prefix.pch"; sourceTree = "<group>"; };
+		9A7AE7E4191AD6DC009B4012 /* CLDRPlurals.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CLDRPlurals.h; sourceTree = "<group>"; };
+		9A7AE7EB191AD6DC009B4012 /* CLDRPluralsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CLDRPluralsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9A7AE7EC191AD6DC009B4012 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
+		9A7AE7F4191AD6DC009B4012 /* CLDRPluralsTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "CLDRPluralsTests-Info.plist"; sourceTree = "<group>"; };
+		9A7AE7F6191AD6DC009B4012 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		9A7AE7F8191AD6DC009B4012 /* CLDRPluralsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CLDRPluralsTests.m; sourceTree = "<group>"; };
+		9A7AE802191AD770009B4012 /* CLDRRulesTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLDRRulesTests.m; sourceTree = "<group>"; };
+		9A7AE804191AD77A009B4012 /* CLDRPluralOperands.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLDRPluralOperands.h; sourceTree = "<group>"; };
+		9A7AE805191AD77A009B4012 /* CLDRPluralOperands.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLDRPluralOperands.m; sourceTree = "<group>"; };
+		9A7AE806191AD77A009B4012 /* CLDRPluralRule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLDRPluralRule.h; sourceTree = "<group>"; };
+		9A7AE807191AD77A009B4012 /* CLDRPluralRule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLDRPluralRule.m; sourceTree = "<group>"; };
+		9A7AE80A191AD77A009B4012 /* NSBundle+CLDRPlurals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+CLDRPlurals.h"; sourceTree = "<group>"; };
+		9A7AE80B191AD77A009B4012 /* NSBundle+CLDRPlurals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+CLDRPlurals.m"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		9A7AE7D5191AD6DC009B4012 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A7AE7DC191AD6DC009B4012 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9A7AE7E8191AD6DC009B4012 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A7AE7F1191AD6DC009B4012 /* libCLDRPlurals.a in Frameworks */,
+				9A7AE7EE191AD6DC009B4012 /* Cocoa.framework in Frameworks */,
+				9A7AE7ED191AD6DC009B4012 /* XCTest.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		9A7AE7CF191AD6DC009B4012 = {
+			isa = PBXGroup;
+			children = (
+				9A7AE7E1191AD6DC009B4012 /* CLDRPlurals */,
+				9A7AE7F2191AD6DC009B4012 /* CLDRPluralsTests */,
+				9A7AE7DA191AD6DC009B4012 /* Frameworks */,
+				9A7AE7D9191AD6DC009B4012 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		9A7AE7D9191AD6DC009B4012 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				9A7AE7D8191AD6DC009B4012 /* libCLDRPlurals.a */,
+				9A7AE7EB191AD6DC009B4012 /* CLDRPluralsTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		9A7AE7DA191AD6DC009B4012 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9A7AE7DB191AD6DC009B4012 /* Cocoa.framework */,
+				9A7AE7EC191AD6DC009B4012 /* XCTest.framework */,
+				9A7AE7DD191AD6DC009B4012 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9A7AE7DD191AD6DC009B4012 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9A7AE7DE191AD6DC009B4012 /* Foundation.framework */,
+				9A7AE7DF191AD6DC009B4012 /* CoreData.framework */,
+				9A7AE7E0191AD6DC009B4012 /* AppKit.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		9A7AE7E1191AD6DC009B4012 /* CLDRPlurals */ = {
+			isa = PBXGroup;
+			children = (
+				9A7AE7E4191AD6DC009B4012 /* CLDRPlurals.h */,
+				9A7AE804191AD77A009B4012 /* CLDRPluralOperands.h */,
+				9A7AE805191AD77A009B4012 /* CLDRPluralOperands.m */,
+				9A7AE806191AD77A009B4012 /* CLDRPluralRule.h */,
+				9A7AE807191AD77A009B4012 /* CLDRPluralRule.m */,
+				9A7AE80A191AD77A009B4012 /* NSBundle+CLDRPlurals.h */,
+				9A7AE80B191AD77A009B4012 /* NSBundle+CLDRPlurals.m */,
+				9A7AE7E2191AD6DC009B4012 /* Supporting Files */,
+			);
+			path = CLDRPlurals;
+			sourceTree = "<group>";
+		};
+		9A7AE7E2191AD6DC009B4012 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				9A7AE7E3191AD6DC009B4012 /* CLDRPlurals-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		9A7AE7F2191AD6DC009B4012 /* CLDRPluralsTests */ = {
+			isa = PBXGroup;
+			children = (
+				9A7AE7F8191AD6DC009B4012 /* CLDRPluralsTests.m */,
+				9A7AE802191AD770009B4012 /* CLDRRulesTests.m */,
+				9A7AE7F3191AD6DC009B4012 /* Supporting Files */,
+			);
+			path = CLDRPluralsTests;
+			sourceTree = "<group>";
+		};
+		9A7AE7F3191AD6DC009B4012 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				9A7AE7F4191AD6DC009B4012 /* CLDRPluralsTests-Info.plist */,
+				9A7AE7F5191AD6DC009B4012 /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		9A7AE7D6191AD6DC009B4012 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A7AE80C191AD77A009B4012 /* CLDRPluralOperands.h in Headers */,
+				9A7AE80E191AD77A009B4012 /* CLDRPluralRule.h in Headers */,
+				9A7AE812191AD77A009B4012 /* NSBundle+CLDRPlurals.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		9A7AE7D7191AD6DC009B4012 /* CLDRPlurals */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9A7AE7FC191AD6DC009B4012 /* Build configuration list for PBXNativeTarget "CLDRPlurals" */;
+			buildPhases = (
+				9A7AE7D4191AD6DC009B4012 /* Sources */,
+				9A7AE7D5191AD6DC009B4012 /* Frameworks */,
+				9A7AE7D6191AD6DC009B4012 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CLDRPlurals;
+			productName = CLDRPlurals;
+			productReference = 9A7AE7D8191AD6DC009B4012 /* libCLDRPlurals.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		9A7AE7EA191AD6DC009B4012 /* CLDRPluralsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9A7AE7FF191AD6DC009B4012 /* Build configuration list for PBXNativeTarget "CLDRPluralsTests" */;
+			buildPhases = (
+				9A7AE7E7191AD6DC009B4012 /* Sources */,
+				9A7AE7E8191AD6DC009B4012 /* Frameworks */,
+				9A7AE7E9191AD6DC009B4012 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9A7AE7F0191AD6DC009B4012 /* PBXTargetDependency */,
+			);
+			name = CLDRPluralsTests;
+			productName = CLDRPluralsTests;
+			productReference = 9A7AE7EB191AD6DC009B4012 /* CLDRPluralsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		9A7AE7D0191AD6DC009B4012 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0510;
+				ORGANIZATIONNAME = "Cory Kilger";
+			};
+			buildConfigurationList = 9A7AE7D3191AD6DC009B4012 /* Build configuration list for PBXProject "CLDRPlurals" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 9A7AE7CF191AD6DC009B4012;
+			productRefGroup = 9A7AE7D9191AD6DC009B4012 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				9A7AE7D7191AD6DC009B4012 /* CLDRPlurals */,
+				9A7AE7EA191AD6DC009B4012 /* CLDRPluralsTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		9A7AE7E9191AD6DC009B4012 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A7AE7F7191AD6DC009B4012 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		9A7AE7D4191AD6DC009B4012 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A7AE80F191AD77A009B4012 /* CLDRPluralRule.m in Sources */,
+				9A7AE813191AD77A009B4012 /* NSBundle+CLDRPlurals.m in Sources */,
+				9A7AE80D191AD77A009B4012 /* CLDRPluralOperands.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9A7AE7E7191AD6DC009B4012 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9A7AE803191AD770009B4012 /* CLDRRulesTests.m in Sources */,
+				9A7AE7F9191AD6DC009B4012 /* CLDRPluralsTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		9A7AE7F0191AD6DC009B4012 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9A7AE7D7191AD6DC009B4012 /* CLDRPlurals */;
+			targetProxy = 9A7AE7EF191AD6DC009B4012 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		9A7AE7F5191AD6DC009B4012 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				9A7AE7F6191AD6DC009B4012 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		9A7AE7FA191AD6DC009B4012 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"${SRCROOT}",
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		9A7AE7FB191AD6DC009B4012 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"${SRCROOT}",
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		9A7AE7FD191AD6DC009B4012 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "CLDRPlurals/CLDRPlurals-Prefix.pch";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		9A7AE7FE191AD6DC009B4012 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "CLDRPlurals/CLDRPlurals-Prefix.pch";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		9A7AE800191AD6DC009B4012 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "CLDRPlurals/CLDRPlurals-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "CLDRPluralsTests/CLDRPluralsTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Debug;
+		};
+		9A7AE801191AD6DC009B4012 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "CLDRPlurals/CLDRPlurals-Prefix.pch";
+				INFOPLIST_FILE = "CLDRPluralsTests/CLDRPluralsTests-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = xctest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		9A7AE7D3191AD6DC009B4012 /* Build configuration list for PBXProject "CLDRPlurals" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9A7AE7FA191AD6DC009B4012 /* Debug */,
+				9A7AE7FB191AD6DC009B4012 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9A7AE7FC191AD6DC009B4012 /* Build configuration list for PBXNativeTarget "CLDRPlurals" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9A7AE7FD191AD6DC009B4012 /* Debug */,
+				9A7AE7FE191AD6DC009B4012 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		9A7AE7FF191AD6DC009B4012 /* Build configuration list for PBXNativeTarget "CLDRPluralsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9A7AE800191AD6DC009B4012 /* Debug */,
+				9A7AE801191AD6DC009B4012 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 9A7AE7D0191AD6DC009B4012 /* Project object */;
+}

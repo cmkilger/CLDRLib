@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-
-@interface CLDRPlurals : NSObject
-
-@end
+#import <CLDRPlurals/CLDRPluralOperands.h>
+#import <CLDRPlurals/CLDRPluralRule.h>
+#import <CLDRPlurals/NSBundle+CLDRPlurals.h>

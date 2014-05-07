@@ -7,7 +7,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import "CLDRPluralOperands.h"
+#import <CLDRPlurals/CLDRPlurals.h>
 
 @interface CLDRPluralsTests : XCTestCase
 
