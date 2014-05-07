@@ -69,6 +69,15 @@ static inline NSString * trimTrailingZeros(NSString * number) {
     return self;
 }
 
+- (NSUInteger)hash {
+    return [[[NSString alloc] initWithFormat:@"%lu.%lu", self.i, self.f] hash];
+}
+
+- (BOOL)isEqual:(id)object {
+    CLDRPluralOperands * o = object;
+    return (self.n == o.n && self.i == o.i && self.v == o.v && self.w == o.w && self.f == o.f && self.t == o.t);
+}
+
 - (NSString *)description {
     return [[NSString alloc] initWithFormat:@"<%@: 0x%lx; n:%@; i:%lu; v:%lu; w:%lu; f:%lu; t:%lu>", [self class], (unsigned long)self, @(_n), _i, _v, _w, _f, _t];
 }

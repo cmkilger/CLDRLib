@@ -654,7 +654,7 @@ typedef NS_ENUM(NSUInteger, TokenType) {
     
     for (SampleList * sampleList in sampleLists) {
         for (SampleRange * range in sampleList.sampleRanges) {
-            [tests appendFormat:@"    XCTAssertEqual([rule pluralKeyForString:@\"%@\"], @\"%@\", @\"\");\n", range.start, key];
+            [tests appendFormat:@"    XCTAssertEqualObjects([rule pluralKeyForString:@\"%@\"], @\"%@\", @\"\");\n", range.start, key];
             if (range.end) {
                 NSArray * components = [range.start componentsSeparatedByString:@"."];
                 unsigned long multiplier = ([components count] > 1 ? pow(10, [components[1] length]) : 1);
@@ -662,12 +662,12 @@ typedef NS_ENUM(NSUInteger, TokenType) {
                 if (multiplier == 1) {
                     unsigned long end = [range.end integerValue];
                     for (unsigned long i = [range.start integerValue]+1; i <= end; i++) {
-                        [tests appendFormat:@"    XCTAssertEqual([rule pluralKeyForString:@\"%lu\"], @\"%@\", @\"\");\n", i, key];
+                        [tests appendFormat:@"    XCTAssertEqualObjects([rule pluralKeyForString:@\"%lu\"], @\"%@\", @\"\");\n", i, key];
                     }
                 } else {
                     unsigned long end = [range.end doubleValue]*multiplier;
                     for (unsigned long i = [range.start doubleValue]*multiplier+1; i <= end; i++) {
-                        [tests appendFormat:@"    XCTAssertEqual([rule pluralKeyForString:@\"%lu.%lu\"], @\"%@\", @\"\");\n", i/multiplier, i%multiplier, key];
+                        [tests appendFormat:@"    XCTAssertEqualObjects([rule pluralKeyForString:@\"%lu.%lu\"], @\"%@\", @\"\");\n", i/multiplier, i%multiplier, key];
                     }
                 }
             }
