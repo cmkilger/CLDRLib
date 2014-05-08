@@ -81,4 +81,22 @@
     XCTAssert(o1.hash == o2.hash, @"");
 }
 
+#define LocalizedStringWithCount(key, input) \
+    ([NSString stringWithFormat:[bundle pluralLocalizedStringForKey:key count:input value:nil table:nil], @(input)])
+#define LocalizedStringWithAmount(key, input) \
+    ([NSString stringWithFormat:[bundle pluralLocalizedStringForKey:key amount:input value:nil table:nil], @(input)])
+#define LocalizedStringWithString(key, input) \
+    ([NSString stringWithFormat:[bundle pluralLocalizedStringForKey:key pluralValue:input options:@{CLDRPluralRuleOptionDecimalSeparator: @","} value:nil table:nil], input])
+
+- (void)testLocalizedStrings {
+    NSBundle * bundle = [NSBundle bundleForClass:[self class]];
+    XCTAssertEqualObjects(LocalizedStringWithCount(@"cats", 1), @"1 cat", @"");
+    XCTAssertEqualObjects(LocalizedStringWithCount(@"cats", 2), @"2 cats", @"");
+    XCTAssertEqualObjects(LocalizedStringWithAmount(@"miles", 1.0), @"1 mile", @"");
+    XCTAssertEqualObjects(LocalizedStringWithAmount(@"miles", 1.20), @"1.2 miles", @"");
+    XCTAssertEqualObjects(LocalizedStringWithString(@"pounds", @"1"), @"1 pound", @"");
+    XCTAssertEqualObjects(LocalizedStringWithString(@"pounds", @"1,000"), @"1,000 pounds", @"");
+    XCTAssertEqualObjects(LocalizedStringWithString(@"pounds", @"1,230"), @"1,230 pounds", @"");
+}
+
 @end

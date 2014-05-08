@@ -1,0 +1,14 @@
+/* 
+  File.strings
+  CLDRPlurals
+
+  Created by Cory Kilger on 5/7/14.
+  Copyright (c) 2014 Cory Kilger. All rights reserved.
+*/
+
+"cats.one" = "%@ cat";
+"cats.other" = "%@ cats";
+"miles.one" = "%@ mile";
+"miles.other" = "%@ miles";
+"pounds.one" = "%@ pound";
+"pounds.other" = "%@ pounds";
