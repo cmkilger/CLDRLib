@@ -1,0 +1,10 @@
+{
+    "rules": {
+        "placeholder": "<#rules#>",
+        "file": "CLDRPlurals/CLDRPlurals/CLDRPluralRule.m"
+    },
+    "tests": {
+        "placeholder": "<#tests#>",
+        "file": "CLDRPlurals/CLDRPluralsTests/CLDRRulesTests.m"
+    }
+}

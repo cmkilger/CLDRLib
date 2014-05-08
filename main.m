@@ -74,11 +74,11 @@ typedef NS_ENUM(NSUInteger, TokenType) {
 
 @end
 
-@interface LexicalAnalyzer : NSObject
+@interface RuleTokenizer : NSObject
 @end
-@implementation LexicalAnalyzer
+@implementation RuleTokenizer
 
-+ (NSArray *)analyze:(NSString *)ruleSource {
++ (NSArray *)tokenize:(NSString *)ruleSource {
     NSMutableArray * tokens = [[NSMutableArray alloc] init];
     
     NSUInteger length = [ruleSource length];
@@ -742,10 +742,7 @@ NSMutableString * OptimizeCode(NSMutableString * code) {
     return code;
 }
 
-NSString * GenerateCode(NSString * file) {
-    NSData * data = [[NSData alloc] initWithContentsOfFile:file];
-    NSDictionary * input = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil][@"supplemental"][@"plurals-type-cardinal"];
-    
+NSString * GenerateCode(NSDictionary * input) {
     NSMutableString * code = [[NSMutableString alloc] initWithString:@"rules = @{\n"];
     [input enumerateKeysAndObjectsUsingBlock:^(id language, id rules, BOOL *stop) {
         [code appendFormat:@"    @\"%@\": ^(CLDRPluralOperands * o){\n", language];
@@ -754,7 +751,7 @@ NSString * GenerateCode(NSString * file) {
         [rules enumerateKeysAndObjectsUsingBlock:^(id key, id rule, BOOL *stop) {
             if ([key isEqualToString:@"pluralRule-count-other"]) return;
             
-            NSArray * tokens = [LexicalAnalyzer analyze:rule];
+            NSArray * tokens = [RuleTokenizer tokenize:rule];
             if (!tokens) {
                 NSLog(@"Error parsing rule: %@:%@", language, key);
                 return;
@@ -781,17 +778,14 @@ NSString * GenerateCode(NSString * file) {
     return code;
 }
 
-NSString * GenerateTests(NSString * file) {
-    NSData * data = [[NSData alloc] initWithContentsOfFile:file];
-    NSDictionary * input = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil][@"supplemental"][@"plurals-type-cardinal"];
-    
+NSString * GenerateTests(NSDictionary * input) {
     NSMutableString * tests = [[NSMutableString alloc] initWithString:@"@implementation CLDRRulesTests\n\n"];
     [input enumerateKeysAndObjectsUsingBlock:^(id language, id rules, BOOL *stop) {
         [tests appendFormat:@"- (void)testLanguage_%@ {\n", [language stringByReplacingOccurrencesOfString:@"-" withString:@"_"]];
         [tests appendFormat:@"    CLDRPluralRule * rule = [[CLDRPluralRule alloc] initWithLanguageCode:@\"%@\"];\n\n", language];
         
         [rules enumerateKeysAndObjectsUsingBlock:^(id key, id rule, BOOL *stop) {
-            NSArray * tokens = [LexicalAnalyzer analyze:rule];
+            NSArray * tokens = [RuleTokenizer tokenize:rule];
             if (!tokens) {
                 NSLog(@"Error parsing rule: %@:%@", language, key);
                 return;
@@ -817,11 +811,116 @@ NSString * GenerateTests(NSString * file) {
 
 int main(int argc, char * argv[]) {
     @autoreleasepool {
-//        NSString * code = GenerateCode(@"/Users/cmkilger/Downloads/json/supplemental/plurals.json");
-        NSString * tests = GenerateTests(@"/Users/cmkilger/Downloads/json/supplemental/plurals.json");
+        if (argc < 2) {
+            printf("Usage: %s <cldr/supplemental/plurals.json>\n", argv[0]);
+            exit(1);
+        }
         
-//        NSLog(@"%@", code);
-        NSLog(@"%@", tests);
+        NSFileManager * fileManager = [NSFileManager defaultManager];
+        
+        NSString * pwd = [fileManager currentDirectoryPath];
+        BOOL isDirectory = YES;
+        NSString * templates = [pwd stringByAppendingPathComponent:@"templates"];
+        if (![fileManager fileExistsAtPath:templates isDirectory:&isDirectory] || !isDirectory) {
+            printf("Error: Unable to find templates directory\n");
+            exit(2);
+        }
+        
+        NSString * dist = [pwd stringByAppendingPathComponent:@"dist"];
+        [fileManager createDirectoryAtPath:dist withIntermediateDirectories:YES attributes:nil error:nil];
+        if (![fileManager fileExistsAtPath:templates isDirectory:&isDirectory] || !isDirectory) {
+            printf("Error: Unable to create dist directory\n");
+            exit(3);
+        }
+        
+        //@"/Users/cmkilger/Downloads/json/supplemental/plurals.json"
+        NSString * filePath = [[NSString alloc] initWithCString:argv[1] encoding:NSUTF8StringEncoding];
+        NSData * data = [[NSData alloc] initWithContentsOfFile:filePath];
+        NSDictionary * input = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil][@"supplemental"][@"plurals-type-cardinal"];
+        
+        NSArray * languages = [fileManager contentsOfDirectoryAtPath:templates error:nil];
+        for (NSString * language in languages) {
+            NSString * languagePath = [templates stringByAppendingPathComponent:language];
+            if (![fileManager fileExistsAtPath:languagePath isDirectory:&isDirectory] || !isDirectory) {
+                continue;
+            }
+            
+            NSString * configPath = [languagePath stringByAppendingPathComponent:@"template.json"];
+            NSData * configData = [NSData dataWithContentsOfFile:configPath];
+            if (!configData) {
+                printf("Error: Unable to find or read file %s\n", [configPath UTF8String]);
+                continue;
+            }
+            
+            NSDictionary * config = [NSJSONSerialization JSONObjectWithData:configData options:0 error:nil];
+            if (![config isKindOfClass:[NSDictionary class]]) {
+                printf("Error: Unable to parse the file %s\n", [configPath UTF8String]);
+                continue;
+            }
+            
+            NSDictionary * rules = config[@"rules"];
+            if ([rules isKindOfClass:[NSDictionary class]]) {
+                NSString * rulesFile = rules[@"file"];
+                NSString * placeholder = rules[@"placeholder"];
+                if (!rulesFile || !placeholder) {
+                    printf("Error: \"rules\" must contain both \"placeholder\" and \"file\" in %s\n", [configPath UTF8String]);
+                    continue;
+                }
+            }
+            
+            NSDictionary * tests = config[@"tests"];
+            if ([tests isKindOfClass:[NSDictionary class]]) {
+                NSString * testsFile = rules[@"file"];
+                NSString * placeholder = rules[@"placeholder"];
+                if (!testsFile || !placeholder) {
+                    printf("Error: \"tests\" must contain both \"placeholder\" and \"file\" in %s\n", [configPath UTF8String]);
+                    continue;
+                }
+            }
+            
+            NSString * languagedist = [dist stringByAppendingPathComponent:language];
+            [fileManager removeItemAtPath:languagedist error:nil];
+            [fileManager copyItemAtPath:languagePath toPath:languagedist error:nil];
+            [fileManager removeItemAtPath:[languagedist stringByAppendingPathComponent:@"template.json"] error:nil];
+            
+            if (rules) {
+                NSStringEncoding rulesEncoding;
+                NSString * rulesFile = [languagedist stringByAppendingPathComponent:rules[@"file"]];
+                NSMutableString * rulesContent = [[NSMutableString alloc] initWithContentsOfFile:rulesFile usedEncoding:&rulesEncoding error:nil];
+                if (!rulesContent) {
+                    printf("Error: Unable to read file %s\n", [rulesFile UTF8String]);
+                    continue;
+                }
+                
+                NSError * rulesError = nil;
+                NSString * rulesCode = GenerateCode(input);
+                [rulesContent replaceOccurrencesOfString:rules[@"placeholder"] withString:rulesCode options:0 range:NSMakeRange(0, [rulesContent length])];
+                [rulesContent writeToFile:rulesFile atomically:YES encoding:rulesEncoding error:&rulesError];
+                if (rulesError) {
+                    printf("Error: Unable to write file %s\n", [rulesFile UTF8String]);
+                    continue;
+                }
+            }
+            
+            if (tests) {
+                NSStringEncoding testsEncoding;
+                NSString * testsFile = [languagedist stringByAppendingPathComponent:tests[@"file"]];
+                NSMutableString * testsContent = [[NSMutableString alloc] initWithContentsOfFile:testsFile usedEncoding:&testsEncoding error:nil];
+                if (!testsContent) {
+                    printf("Error: Unable to read file %s\n", [testsFile UTF8String]);
+                    continue;
+                }
+                
+                NSError * testsError = nil;
+                NSString * testsCode = GenerateTests(input);
+                [testsContent replaceOccurrencesOfString:tests[@"placeholder"] withString:testsCode options:0 range:NSMakeRange(0, [testsContent length])];
+                [testsContent writeToFile:testsFile atomically:YES encoding:testsEncoding error:&testsError];
+                if (testsError) {
+                    printf("Error: Unable to write file %s\n", [testsFile UTF8String]);
+                    continue;
+                }
+            }
+        }
         
         return 0;
     }
